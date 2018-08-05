@@ -1,0 +1,22 @@
+{
+  "name": "player",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Igor Kryvenko"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/igorKryvenko/player",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "magnific-popup": "^1.1.0"
+  }
+}

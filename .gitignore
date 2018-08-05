@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /zip
+app/libs
 
 # dependencies
 /node_modules
