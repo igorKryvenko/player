@@ -6,10 +6,15 @@ var gulp = require('gulp'),
     cssnano = require('gulp-cssnano'),
     rename =require('gulp-rename');
 
-gulp.task('sass', function() {
-  return gulp.src('app/sass/**/*.+(scss|sass)')
+gulp.task('icons', function() {
+  return gulp.src('./node_modules/font-awesome/fonts/**.*')
+    .pipe(gulp.dest('./app/fonts'));
+});
+
+gulp.task('sass', ['icons'], function() {
+  return gulp.src('app/sass/**/*.scss')
     .pipe(sass())
-    .pipe(gulp.dest('app/css/libs.css'))
+    .pipe(gulp.dest('app/css/'))
     .pipe(browserSync.reload({stream: true}))
 });
 
@@ -23,7 +28,7 @@ gulp.task('scripts', function() {
   .pipe(gulp.dest('app/js'));
 });
 
-gulp.taks('minify-css',['sass'] function() {
+gulp.task('minify-css',['sass'],  function() {
   return gulp.src('app/css/libs.css')
     .pipe(cssnano())
     .pipe(rename({suffix: '.min'}))

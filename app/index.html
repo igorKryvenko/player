@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/">
+  <title>Cloud-Player</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="keywords" content="audio player, video player, SoundCloud, YouTube, Mixcloud, music">
+  <meta name="description"
+        content="Free music/video player to play music from YouTube, SoundCloud and Mixcloud. Listen to awesome music by awesome artists!">
+  <meta name="subject" content="Awesome music by awesome artists">
+  <meta name="language" content="EN">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Language" content="en">  
+  <link rel="stylesheet" type="text/css" href="./css/styles.css">
+
+</head>
+<body>
+  <section class="main">
+
+    <div class="native-bar">
+      <div class="darwin-btns"></div>
+    </div>
+
+    <main class="flex-container">
+      <app-nav-sidebar class="flex-item">
+        <section class="column">
+
+          <div #shrinkingSidebar
+               class="sidebar">
+            <div class="cloud-player">
+              <app-cloud-player-logo [animate]="true"></app-cloud-player-logo>
+            </div>
+
+            <div class="menu scrollable">
+              <nav>
+                <a href="/search" class="nav-item">
+                  <i class="icon fa fa-search" aria-hidden="true"></i>
+                  <img class="avatar" aria-hidden="true" [src]="image"/>
+                  <div class="text">Search</div>
+                </a>
+                <a href="/native-app" class="nav-item">
+                  <i class="icon fa fa-desktoph" aria-hidden="true"></i>
+                  <img class="avatar" aria-hidden="true" [src]="image"/>
+                  <div class="text">Desktop App</div>
+                </a>
+
+
+                <div class="account">
+
+                  <div class="divider">
+                    <div class="title">
+                      <span class="icon"></span>
+                      <span class="text">Account</span>
+                    </div>
+                  </div>
+
+
+                  <a href="/me" class="nav-item user">
+                    <i class="icon fa fa-user" aria-hidden="true"></i>
+                    <img class="avatar" aria-hidden="true" [src]="image"/>
+                    <div class="text">Desktop App</div>
+                  </a>
+
+
+                  <a href="/me/likes" class="nav-item">
+                    <i class="icon fa fa-heart" aria-hidden="true"></i>
+                    <img class="avatar" aria-hidden="true" [src]="image"/>
+                    <div class="text">Likes</div>
+                  </a>
+
+                                    <a href="/me/playlists" class="nav-item visible-xs visible-sm">
+                                      <i class="icon fa fa-list-alt" aria-hidden="true"></i>
+                                      <img class="avatar" aria-hidden="true" [src]="image"/>
+                                      <div class="text">Playlists</div>
+                                    </a>
+                </div>
+
+
+                <a href="/me/playlists" class="nav-item">
+                  <i class="icon fa fa-user secret" aria-hidden="true"></i>
+                  <img class="avatar" aria-hidden="true" [src]="image"/>
+                  <div class="text">Update Privacy Settings</div>
+                </a>
+
+                <div class="divider">
+                  <div class="title">
+                    <span class="icon "></span>
+                    <span class="text">Playlists</span>
+                  </div>
+                </div>
+
+
+
+
+              </nav>
+            </div>
+
+            <div class="footer">
+              <span class="version">v{{version}}</span> •
+              <span class="imprint">
+                <a routerLink="/imprint">Imprint</a>
+              </span> •
+              <span class="privacy">
+                <a routerLink="/privacy">Privacy</a>
+              </span>
+            </div>
+
+          </div>
+
+        </section>
+      </app-nav-sidebar>
+      <app-player class="flex-item"></app-player>
+      <div class="routes">
+        <app-toasts></app-toasts>
+        <app-scroll-view>
+          <router-outlet class="flex-item"></router-outlet>
+        </app-scroll-view>
+      </div>
+
+    </main>
+
+  </section>
+</body>
+</html>
