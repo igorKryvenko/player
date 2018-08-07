@@ -11,8 +11,12 @@
   <meta name="subject" content="Awesome music by awesome artists">
   <meta name="language" content="EN">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="Content-Language" content="en">  
+  <meta http-equiv="Content-Language" content="en">
   <link rel="stylesheet" type="text/css" href="./css/styles.css">
+  <link rel="stylesheet" type="text/css" href="./css/nav.css">
+  <link rel="stylesheet" type="text/css" href="./css/main.css">
+  <link rel="stylesheet" type="text/css" href="./css/logo.css">
+  <link rel="stylesheet" type="text/css" href="./css/player.css">
 
 </head>
 <body>
@@ -29,22 +33,38 @@
           <div #shrinkingSidebar
                class="sidebar">
             <div class="cloud-player">
-              <app-cloud-player-logo [animate]="true"></app-cloud-player-logo>
+              <div class="cloud-player-logo">
+                  <object type="image/svg+xml"
+                          data="..//assets/logo-layers/left-wheel.svg"
+                          class="left-wheel anim-rotate reverse animatable"></object>
+                  <object type="image/svg+xml"
+                          data="..//assets/logo-layers/right-wheel.svg"
+                          class="right-wheel anim-rotate reverse animatable"></object>
+                  <object type="image/svg+xml"
+                          data="..//assets/logo-layers/rack.svg"
+                          class="rack anim-rotate animatable"></object>
+                  <object type="image/svg+xml"
+                          data="..//assets/logo-layers/tape.svg"
+                          class="tape"></object>
+                  <object type="image/svg+xml"
+                          data="..//assets/logo-layers/note-l.svg"
+                          class="note-l animatable"></object>
+                  <object type="image/svg+xml"
+                          data="..//assets/logo-layers/note-r.svg"
+                          class="note-r animatable"></object>
+                  <object #playPause
+                          type="image/svg+xml"
+                          data="..//assets/logo-layers/play-pause.svg"
+                          class="play-pause"></object>
+              </div>
             </div>
 
             <div class="menu scrollable">
               <nav>
                 <a href="/search" class="nav-item">
                   <i class="icon fa fa-search" aria-hidden="true"></i>
-                  <img class="avatar" aria-hidden="true" [src]="image"/>
                   <div class="text">Search</div>
                 </a>
-                <a href="/native-app" class="nav-item">
-                  <i class="icon fa fa-desktoph" aria-hidden="true"></i>
-                  <img class="avatar" aria-hidden="true" [src]="image"/>
-                  <div class="text">Desktop App</div>
-                </a>
-
 
                 <div class="account">
 
@@ -58,30 +78,16 @@
 
                   <a href="/me" class="nav-item user">
                     <i class="icon fa fa-user" aria-hidden="true"></i>
-                    <img class="avatar" aria-hidden="true" [src]="image"/>
-                    <div class="text">Desktop App</div>
+                    <div class="text">Guest</div>
                   </a>
 
 
                   <a href="/me/likes" class="nav-item">
                     <i class="icon fa fa-heart" aria-hidden="true"></i>
-                    <img class="avatar" aria-hidden="true" [src]="image"/>
                     <div class="text">Likes</div>
                   </a>
-
-                                    <a href="/me/playlists" class="nav-item visible-xs visible-sm">
-                                      <i class="icon fa fa-list-alt" aria-hidden="true"></i>
-                                      <img class="avatar" aria-hidden="true" [src]="image"/>
-                                      <div class="text">Playlists</div>
-                                    </a>
                 </div>
 
-
-                <a href="/me/playlists" class="nav-item">
-                  <i class="icon fa fa-user secret" aria-hidden="true"></i>
-                  <img class="avatar" aria-hidden="true" [src]="image"/>
-                  <div class="text">Update Privacy Settings</div>
-                </a>
 
                 <div class="divider">
                   <div class="title">
@@ -89,6 +95,39 @@
                     <span class="text">Playlists</span>
                   </div>
                 </div>
+
+                <!-- <div class="playlists">
+                  <div class="collapsible clickable">
+                    <div class="collapsible-head" (click)="toggle()">
+                      <div class="title">
+                        <span *ngIf="icon" class="icon {{icon}}"></span>
+                        <span ng-if="title" class="text">{{title}}</span>
+                      </div>
+                      <button class="toggler">
+                        <span *ngIf="isOpened()" class="fa fa-angle-up"></span>
+                        <span *ngIf="!isOpened()" class="fa fa-angle-down"></span>
+                      </button>
+                    </div>
+                    <div #collapsibleBody class="collapsible-body" ngClass="{'is-collapsed': !isOpened()}">
+                      <div #collapsibleBodyContent class="collapsible-body-content">
+                        <ng-content></ng-content>
+                      </div>
+                    </div>
+                  </div>
+                  <app-collapsible>
+                    <div class="nav-item clickable">
+                      <i class="icon fa fa-plus" aria-hidden="true"></i>
+                      <div  class="text">Add new playlist</div>
+                      <form class="form-inline">
+                        <div class="form-group">
+                          <input type="text"
+                                 name="navInputTitle"
+                                 class="form-control">
+                        </div>
+                      </form>
+                    </div>
+                  </app-collapsible>
+                </div> -->
 
 
 
@@ -110,7 +149,30 @@
 
         </section>
       </app-nav-sidebar>
-      <app-player class="flex-item"></app-player>
+      <app-player class="flex-item">
+        <section class="player no-items">
+
+          <div class="track-item">
+            <div class="app-track-cover">
+            <div class="track-cover noTrack">
+
+              <div class="no-track">
+                <img src="/assets/cassette.jpg">
+              </div>
+            </div>
+          </div>
+            <app-player-manager #playerManager
+                                [playQueue]="playQueue"
+                                (playerStatusChange)="changePlayerStatus($event)"></app-player-manager>
+
+            <app-player-controls [isBuffering]="isBuffering"
+                                 [playQueue]="playQueue"
+                                 (volumeChange)="setVolume($event)"></app-player-controls>
+          </div>
+
+          <app-play-queue [playQueue]="playQueue" class="queue"></app-play-queue>
+        </section>
+      </app-player>
       <div class="routes">
         <app-toasts></app-toasts>
         <app-scroll-view>
