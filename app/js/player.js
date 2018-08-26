@@ -6,67 +6,79 @@ elems.forEach(function(elem) {
 });
 
 
-var Player = function(playlist) {
-  this.playlist = playlist;
-  this.index = 0;
-}
-
-Player.prototype = {
-
-
+Radio.prototype = {
+  /**
+   * Play a station with a specific index.
+   * @param  {Number} index Index in the array of stations.
+   */
   play: function(index) {
-      var self = this;
-      var sound;
+    var self = this;
+    var sound;
 
-      index = typeof index === 'number' ? index : self.index;
-      var data = self.playlist[index];
+    index = typeof index === 'number' ? index : self.index;
+    var data = self.stations[index];
 
-
-      // If we already loaded this track, use the current one.
-// Otherwise, setup and load a new Howl.
-if (data.howl) {
-  sound = data.howl;
-} else {
-  sound = data.howl = new Howl({
-    src: ['./audio/' + data.file + '.webm', './audio/' + data.file + '.mp3'],
-    html5: true, // Force to HTML5 so that the audio can stream in (best for large files).
-    onplay: function() {
-      // Display the duration.
-      duration.innerHTML = self.formatTime(Math.round(sound.duration()));
-
-      // Start upating the progress of the track.
-      requestAnimationFrame(self.step.bind(self));
-
-      // Start the wave animation if we have already loaded
-      wave.container.style.display = 'block';
-      bar.style.display = 'none';
-      pauseBtn.style.display = 'block';
-    },
-    onload: function() {
-      // Start the wave animation.
-      wave.container.style.display = 'block';
-      bar.style.display = 'none';
-      loading.style.display = 'none';
-    },
-    onend: function() {
-      // Stop the wave animation.
-      wave.container.style.display = 'none';
-      bar.style.display = 'block';
-      self.skip('right');
-    },
-    onpause: function() {
-      // Stop the wave animation.
-      wave.container.style.display = 'none';
-      bar.style.display = 'block';
-    },
-    onstop: function() {
-      // Stop the wave animation.
-      wave.container.style.display = 'none';
-      bar.style.display = 'block';
+    // If we already loaded this track, use the current one.
+    // Otherwise, setup and load a new Howl.
+    if (data.howl) {
+      sound = data.howl;
+    } else {
+      sound = data.howl = new Howl({
+        src: data.src,
+        html5: true, // A live stream can only be played through HTML5 Audio.
+        format: ['mp3', 'aac'],
+        onplay: function() {
+          pause.style.display = 'block';
+        }
+      });
     }
-  });
-}
 
-      sound.play();
+    // Begin playing the sound.
+    sound.play();
+
+    // Update the track display.
+
+
+    // Show the pause button.
+    if (sound.state() === 'loaded') {
+      play.style.display = 'none';
+      pause.style.display = 'block';
+    } else {
+      play.style.display = 'none';
+      pause.style.display = 'none';
+    }
+
+    // Keep track of the index we are currently playing.
+    self.index = index;
+  },
+
+  pause: function(index) {
+    var self = this;
+
+
+    var sound = self.playlist[self.index].howl;
+
+    sound.pause();
+
+
+    play.style.display = 'block';
+    pause.style.display = 'none';
+  },
+
+  volume: function(val) {
+    var self = this;
+
+    // Update the global volume (affecting all Howls).
+   Howler.volume(val);
+  },
+
+  togglePlaylist: function() {
+
+  },
+
+  toggleVolume: function() {
+
   }
-}
+
+
+};
