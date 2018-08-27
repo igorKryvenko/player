@@ -2,8 +2,15 @@
 var elems = ['play', 'pause', 'next', 'prev', 'volume-btn', 'progress-bar'];
 
 elems.forEach(function(elem) {
-  window[elem] = document.getElementByClass(elem);
+  window[elem] = document.getElementsByClassName(elem)[0];
 });
+
+var Radio = function(stations) {
+  this.stations = stations;
+  this.index = 0;
+
+
+};
 
 
 Radio.prototype = {
@@ -56,7 +63,7 @@ Radio.prototype = {
     var self = this;
 
 
-    var sound = self.playlist[self.index].howl;
+    var sound = self.stations[self.index].howl;
 
     sound.pause();
 
@@ -82,3 +89,45 @@ Radio.prototype = {
 
 
 };
+
+// Setup our new radio and pass in the stations.
+var player = new Radio([
+  {
+    freq: '81.4',
+    title: "Groove Salad",
+    src: ['http://ice1.somafm.com/groovesalad-128-mp3', 'http://ice1.somafm.com/groovesalad-128-aac'],
+    howl: null
+  },
+  {
+    freq: '89.9',
+    title: "Secret Agent",
+    src: ['http://ice1.somafm.com/secretagent-128-mp3', 'http://ice1.somafm.com/secretagent-128-aac'],
+    howl: null
+  },
+  {
+    freq: '98.9',
+    title: "Indie Pop",
+    src: ['http://ice1.somafm.com/indiepop-128-mp3', 'http://ice1.somafm.com/indiepop-128-aac'],
+    howl: null
+  },
+  {
+    freq: '103.3',
+    title: "Police Radio",
+    src: ['http://ice1.somafm.com/sf1033-128-mp3', 'http://ice2.somafm.com/sf1033-64-aac'],
+    howl: null
+  },
+  {
+    freq: '107.7',
+    title: "The Trip",
+    src: ['http://ice1.somafm.com/thetrip-128-mp3', 'http://ice2.somafm.com/thetrip-64-aac'],
+    howl: null
+  }
+]);
+
+play.addEventListener('click', function(){
+  player.play();
+});
+
+pause.addEventListener('click', function() {
+  player.pause();
+});
