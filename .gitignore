@@ -6,9 +6,9 @@
 /public
 /out-tsc
 /zip
-app/libsapp
-app/css
-app/fonts
+src/libsapp
+src/css
+src/fonts
 
 # dependencies
 /node_modules

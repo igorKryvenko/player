@@ -181,4 +181,15 @@ $(document).ready(function() {
     player.volumeOff();
     $(this).hide();
   });
+
+  $('.range-slider-component').slider({
+    min: 0,
+    max: 100,
+    value: 100,
+    range: "min",
+    animate: true,
+    slide: function(event, ui) {
+      player.setVolume((ui.value)/100)
+    }
+  });
 });
