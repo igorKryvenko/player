@@ -1,5 +1,5 @@
 
-var elems = ['play', 'pause', 'next', 'prev', 'volume-btn', 'progress-bar'];
+var elems = ['play', 'pause', 'next', 'prev', 'volume-btn', 'progress-bar', 'fa-volume-off'];
 
 elems.forEach(function(elem) {
   window[elem] = document.getElementsByClassName(elem)[0];
@@ -8,6 +8,7 @@ elems.forEach(function(elem) {
 var Radio = function(stations) {
   this.stations = stations;
   this.index = 0;
+  this.volume = 100;
 };
 
 Radio.prototype = {
@@ -101,8 +102,15 @@ Radio.prototype = {
     self.skipTo(index);
   },
 
+  volumeOff: function(index) {
+    var self = this;
+    self.volume = 0;
+    self.stations[self.index].howl.mute(true);
+  },
+
   volume: function(val) {
     var self = this;
+    self.volume = val;
 
     // Update the global volume (affecting all Howls).
    Howler.volume(val);
@@ -153,18 +161,24 @@ var player = new Radio([
   }
 ]);
 
-play.addEventListener('click', function(){
-  player.play();
-});
-
-pause.addEventListener('click', function() {
-  player.pause();
-});
-
-next.addEventListener('click', function() {
-  player.skip('next');
-});
-
-prev.addEventListener('click', function() {
-  player.skip('prev');
+$(document).ready(function() {
+  if(player.volume === 0) {
+    $('.fa-volume-off').hide();
+  }
+  $('.play').click(function() {
+    player.play();
+  });
+  $('.pause').click(function() {
+    player.pause();
+  });
+  $('.next').click(function() {
+    player.skip('next');
+  });
+  $('.prev').click(function() {
+    player.skip('prev');
+  });
+  $('.fa-volume-off').click(function(event) {
+    player.volumeOff();
+    $(this).hide();
+  });
 });
