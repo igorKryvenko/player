@@ -8,10 +8,7 @@ elems.forEach(function(elem) {
 var Radio = function(stations) {
   this.stations = stations;
   this.index = 0;
-
-
 };
-
 
 Radio.prototype = {
   /**
@@ -72,6 +69,38 @@ Radio.prototype = {
     pause.style.display = 'none';
   },
 
+  skipTo: function(index) {
+    var self = this;
+
+    // Stop the current track.
+
+    if (self.stations[self.index].howl) {
+      self.stations[self.index].howl.stop();
+    }
+
+    self.play(index);
+  },
+
+  skip: function(direction) {
+    var self = this;
+
+    var index = 0;
+
+    if (direction === 'prev') {
+      index = self.index - 1;
+      if (index < 0) {
+        index = self.stations.length - 1;
+      }
+    } else {
+      index = self.index + 1;
+      if (index >= self.stations.length) {
+        index = 0;
+      }
+    }
+
+    self.skipTo(index);
+  },
+
   volume: function(val) {
     var self = this;
 
@@ -130,4 +159,12 @@ play.addEventListener('click', function(){
 
 pause.addEventListener('click', function() {
   player.pause();
+});
+
+next.addEventListener('click', function() {
+  player.skip('next');
+});
+
+prev.addEventListener('click', function() {
+  player.skip('prev');
 });
