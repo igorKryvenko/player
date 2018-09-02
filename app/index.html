@@ -175,15 +175,23 @@
                       (click)="toggleLoop()">
                 <i class="fa fa-repeat"></i>
               </button>
-              <app-volume-btn [volume]="volume" (volumeChange)="setVolume($event)"></app-volume-btn>
-            </div>
-            <div class="fullscreen">
-              <button *ngIf="fullScreenService.canEnterFullScreen()"
-                      class="btn btn-xs btn-default"
-                      (click)="toggleFullScreen()">
-                <i *ngIf="!fullScreenService.isInFullScreen()" class="fa fa-expand"></i>
-                <i *ngIf="fullScreenService.isInFullScreen()" class="fa fa-compress"></i>
-              </button>
+              <div class="volume-btn">
+                <div class="btn btn-xs btn-default">
+                  <i class="fa fa-volume-up"></i>
+                  <i class="fa fa-volume-down"></i>
+                  <i class="fa fa-volume-off"></i>
+                </div>
+                <app-range-slider [min]="0" [max]="100"
+                                  [(ngModel)]="volume"
+                                  (valueChange)="onSliderChange($event)"
+                                  (valueChanged)="onSliderChanged()"
+                                  [vertical]="true"
+                                  [hideSliderValue]="true"
+                                  [showCurrentValue]="false"
+                                  [showSliderValue]="false"
+                                  [allowInfinity]="false">
+                </app-range-slider>
+              </div>
             </div>
             <div class="button-container">
               <button class="btn prev"
