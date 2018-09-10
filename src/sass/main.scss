@@ -2,6 +2,11 @@
 @import 'variables';
 @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
 @import "../../node_modules/font-awesome/scss/variables";
+@import "logo.scss";
+@import "nav.scss";
+@import "player.scss";
+@import "_variables.scss";
+// @import "styles.scss";
 
 h2 {
   font-size: 28px;
