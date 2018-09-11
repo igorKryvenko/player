@@ -1,41 +1,105 @@
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const argv = require('yargs').argv;
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-  entry: ['./src/js/player.js', './src/sass/main.scss'],
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+const isDevelopment = argv.mode === 'development';
+const isProduction = !isDevelopment;
+const distPath = path.join(__dirname, '/public');
+
+const config = {
+  entry: {
+    main: ['./src/js/player.js', './src/sass/main.scss']
   },
-
-    module: {
+  output: {
+    filename: 'bundle.js',
+    path: distPath
+  },
+  module: {
     rules: [{
-        test: /\.js$/,
-        include: path.resolve(__dirname, 'src/js'),
-        use: {
-          loader: 'babel-loader',
+      test: /\.html$/,
+      use: 'html-loader'
+    }, {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: [{
+        loader: 'babel-loader'
+      }]
+    }, {
+      test: /\.scss$/,
+      exclude: /node_modules/,
+      use: [
+        isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+        'css-loader',
+        {
+          loader: 'postcss-loader',
           options: {
-            presets: [
-              ['@babel/preset-env', {
-                modules: false
-              }],
-            ],
-            plugins: ['@babel/plugin-proposal-class-properties'],
+            plugins: [
+              isProduction ? require('cssnano') : () => {},
+              require('autoprefixer')({
+                browsers: ['last 2 versions']
+              })
+            ]
+          }
+        },
+        'sass-loader'
+      ]
+    }, {
+      test: /\.(gif|png|jpe?g|svg)$/i,
+      use: [{
+        loader: 'file-loader',
+        options: {
+          name: 'images/[name][hash].[ext]'
+        }
+      }, {
+        loader: 'image-webpack-loader',
+        options: {
+          mozjpeg: {
+            progressive: true,
+            quality: 70
           }
         }
       },
-      { // sass / scss loader for webpack
-        test: /\.(sass|scss)$/,
-        loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
-      }
-    ]
+      ],
+    }, {
+      test: /\.(eot|svg|ttf|woff|woff2)$/,
+      use: {
+        loader: 'file-loader',
+        options: {
+          name: 'fonts/[name][hash].[ext]'
+        }
+      },
+    }]
   },
-
   plugins: [
-    new ExtractTextPlugin({
-      filename: './[name].bundle.css',
-      allChunks: true
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css'
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/index.html'
     })
-  ]
+  ],
+  optimization: isProduction ? {
+    minimizer: [
+      new UglifyJsPlugin({
+        sourceMap: true,
+        uglifyOptions: {
+          compress: {
+            inline: false,
+            drop_console: true
+          },
+        },
+      }),
+    ],
+  } : {},
+  devServer: {
+    contentBase: distPath,
+    port: 9000,
+    compress: true,
+    open: false
+  }
 };
+
+module.exports = config;
